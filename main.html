@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>for my babii</title>
+    <!-- Bootstrap 5 + Bootstrap Icons + Google Font (Quicksand - nice and readable) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            /* Blue, purple, black gradient background */
+            background: linear-gradient(145deg, #0d1a2b 0%, #2a1e3c 50%, #1a1a2e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Quicksand', sans-serif;
+            padding: 12px;
+            position: relative;
+            transition: background 0.4s ease;
+        }
+
+        /* STRONG PAPER TEXTURE OVERLAY (creases and noise) */
+        .paper-texture {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(45deg, rgba(200,180,150,0.03) 0px, rgba(200,180,150,0.03) 2px, transparent 2px, transparent 8px),
+                repeating-linear-gradient(135deg, rgba(160,140,120,0.02) 0px, rgba(160,140,120,0.02) 3px, transparent 3px, transparent 9px),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/></filter><rect width="200" height="200" filter="url(%23noise)" opacity="0.08"/></svg>');
+            pointer-events: none;
+            z-index: 20;
+            mix-blend-mode: multiply;
+            opacity: 0.5;
+        }
+
+        /* additional paper fiber lines */
+        .paper-texture::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(210,180,140,0.1) 0%, transparent 30%),
+                        radial-gradient(circle at 80% 70%, rgba(190,160,130,0.1) 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        /* floating background hearts/sparkles (behind paper) */
+        .floating-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .float-heart {
+            position: absolute;
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            opacity: 0.15;
+            color: #9b8ac9;
+            animation: floatUp 8s linear infinite;
+            user-select: none;
+            text-shadow: 0 0 10px #5a4b85;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 0.1; }
+            50% { opacity: 0.2; }
+            100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #b0a0d8;
+            border-radius: 50%;
+            animation: sparkleFloat 7s linear infinite;
+            opacity: 0.2;
+        }
+
+        @keyframes sparkleFloat {
+            0% { transform: translateY(110vh) scale(1); opacity: 0.2; }
+            100% { transform: translateY(-20vh) scale(0.3); opacity: 0; }
+        }
+
+        /* main card - paper base with tape and ribbon */
+        .card-cute {
+            background: #f7f3ee;  /* warm paper base */
+            background-image: linear-gradient(145deg, #faf7f2 0%, #efeae3 100%);
+            border-radius: 48px 48px 48px 48px;
+            box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.5), 0 0 0 2px #d4c9bc inset, 0 0 0 5px #f0e8dd inset;
+            max-width: 1100px;
+            width: 100%;
+            padding: 2.5rem 2.2rem;
+            position: relative;
+            z-index: 15;
+            transition: transform 0.3s, box-shadow 0.4s;
+            animation: cardGlide 0.7s ease-out;
+            border: 1px solid #c0b2a2;
+        }
+
+        /* tape corners (multiple for paper effect) */
+        .card-cute::before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: 30px;
+            width: 120px;
+            height: 30px;
+            background: rgba(210, 190, 170, 0.6);
+            transform: rotate(-3deg);
+            border-radius: 20px 5px 30px 5px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            backdrop-filter: blur(2px);
+            border: 1px dashed #b0a28f;
+            z-index: 5;
+        }
+
+        .card-cute::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            right: 40px;
+            width: 100px;
+            height: 25px;
+            background: rgba(200, 180, 160, 0.5);
+            transform: rotate(4deg);
+            border-radius: 30px 5px 20px 5px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            backdrop-filter: blur(2px);
+            border: 1px dashed #a5947e;
+            z-index: 5;
+        }
+
+        /* extra tape on left side */
+        .card-cute .side-tape {
+            position: absolute;
+            left: -8px;
+            top: 40%;
+            width: 20px;
+            height: 70px;
+            background: rgba(200, 175, 150, 0.5);
+            transform: rotate(-5deg);
+            border-radius: 5px 15px 15px 5px;
+            border: 1px dashed #b59e88;
+            z-index: 6;
+        }
+
+        /* ribbon decoration */
+        .card-cute .ribbon {
+            position: absolute;
+            top: 20px;
+            right: -5px;
+            width: 40px;
+            height: 80px;
+            background: linear-gradient(145deg, #8a7ac9, #5a4b85);
+            border-radius: 0 20px 20px 0;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+            transform: rotate(5deg);
+            z-index: 10;
+            border-left: 2px solid #c0b0e8;
+        }
+
+        .card-cute .ribbon::after {
+            content: "";
+            position: absolute;
+            bottom: -15px;
+            right: 5px;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(145deg, #8a7ac9, #5a4b85);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            transform: rotate(10deg);
+        }
+
+        @keyframes cardGlide {
+            0% { opacity: 0; transform: scale(0.96) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* step transitions */
+        .step {
+            display: none;
+            opacity: 0;
+            transform: translateY(18px);
+            transition: opacity 0.45s cubic-bezier(0.23, 1, 0.32, 1), 
+                        transform 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .step.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========== CENTERING CONTAINERS ========== */
+        .center-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* step 1 greeting - paper style */
+        .greeting-text {
+            font-size: clamp(2rem, 8vw, 3.8rem);
+            font-weight: 700;
+            color: #2a1e3c;
+            text-shadow: 2px 2px 0 #d0c0b0;
+            letter-spacing: -0.01em;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            animation: gentlePop 0.6s;
+            text-align: center;
+            width: 100%;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 250, 240, 0.4);
+            border-radius: 60px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            display: inline-block;
+            position: relative;
+        }
+
+        .greeting-text::before {
+            content: "";
+            position: absolute;
+            top: 5px;
+            left: 10px;
+            width: 40px;
+            height: 15px;
+            background: rgba(180, 160, 140, 0.3);
+            transform: rotate(-5deg);
+            border-radius: 10px;
+            z-index: -1;
+        }
+
+        @keyframes gentlePop {
+            0% { opacity: 0; transform: scale(0.94); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .icon-row {
+            font-size: 2.2rem;
+            color: #5a4b85;
+            margin: 1.5rem 0 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            transition: all 0.3s;
+            width: 100%;
+            background: rgba(240, 230, 220, 0.3);
+            padding: 0.8rem 1.5rem;
+            border-radius: 80px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        .icon-row::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 20%;
+            width: 60px;
+            height: 10px;
+            background: rgba(170, 150, 130, 0.3);
+            transform: rotate(2deg);
+            border-radius: 10px;
+        }
+
+        .icon-row i {
+            transition: transform 0.25s, color 0.2s;
+            opacity: 0.9;
+            display: inline-block;
+        }
+
+        .icon-row i:hover {
+            transform: translateY(-5px) scale(1.1);
+            opacity: 1;
+            color: #2a1e3c;
+        }
+
+        /* button container with tape */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin: 1rem 0;
+            padding: 15px 10px;
+            position: relative;
+        }
+
+        .button-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 20%;
+            width: 60%;
+            height: 10px;
+            background: rgba(200, 180, 160, 0.3);
+            border-radius: 10px;
+            transform: rotate(-1deg);
+        }
+
+        .btn-cute {
+            background: #f0e8dd;
+            border: none;
+            border-radius: 100px;
+            padding: 1rem 2.5rem;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #2a1e3c;
+            border: 2px solid #b0a2c0;
+            box-shadow: 0 6px 0 #a594af, 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.12s cubic-bezier(0.18, 1.3, 0.4, 1);
+            cursor: pointer;
+            display: inline-block;
+            position: relative;
+            background-image: linear-gradient(145deg, #f5efe6, #e5dacd);
+        }
+
+        .btn-cute::before {
+            content: "";
+            position: absolute;
+            top: -5px;
+            left: 20px;
+            width: 50px;
+            height: 15px;
+            background: rgba(180, 160, 150, 0.3);
+            transform: rotate(-3deg);
+            border-radius: 10px;
+            z-index: -1;
+        }
+
+        .btn-cute:active {
+            box-shadow: 0 2px 0 #a594af;
+            transform: translateY(4px);
+        }
+
+        .btn-cute i {
+            color: #5a4b85;
+        }
+
+        /* envelope container with tape */
+        .envelope-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin: 2rem 0 1rem;
+            padding: 20px 15px;
+            position: relative;
+        }
+
+        .envelope-container::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            right: 20%;
+            width: 80px;
+            height: 12px;
+            background: rgba(170, 150, 135, 0.3);
+            transform: rotate(2deg);
+            border-radius: 10px;
+        }
+
+        .envelope-trigger {
+            cursor: pointer;
+            display: inline-block;
+            transition: transform 0.3s cubic-bezier(0.34, 1.3, 0.6, 1);
+            animation: envelopeAppear 0.7s;
+            position: relative;
+        }
+
+        @keyframes envelopeAppear {
+            0% { opacity: 0; transform: scale(0.7) rotate(-2deg); }
+            70% { transform: scale(1.02) rotate(1deg); }
+            100% { opacity: 1; transform: scale(1) rotate(0); }
+        }
+
+        .envelope-trigger:hover {
+            transform: scale(1.02);
+        }
+
+        .envelope-trigger:active {
+            transform: scale(0.96);
+            transition: transform 0.08s;
+        }
+
+        .envelope-design {
+            background: #f0e4d8;
+            background-image: linear-gradient(145deg, #f3ebe2, #e2d5c8);
+            width: clamp(220px, 55vw, 300px);
+            height: clamp(140px, 35vw, 190px);
+            border-radius: 32px 32px 38px 38px;
+            position: relative;
+            box-shadow: 0 16px 0 #b7a6b0, 0 15px 25px rgba(0, 0, 0, 0.2);
+            border: 3px solid #cbb9cf;
+            margin: 0 auto;
+            transition: box-shadow 0.25s, transform 0.25s;
+            animation: bob 3.5s infinite ease-in-out;
+        }
+
+        @keyframes bob {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+            100% { transform: translateY(0); }
+        }
+
+        .envelope-flap-cute {
+            width: 0;
+            height: 0;
+            border-left: clamp(110px, 27vw, 150px) solid transparent;
+            border-right: clamp(110px, 27vw, 150px) solid transparent;
+            border-bottom: clamp(60px, 15vw, 85px) solid #dacbbd;
+            position: absolute;
+            top: calc(-1 * clamp(45px, 11vw, 65px));
+            left: clamp(-5px, -1vw, 0px);
+            filter: drop-shadow(0 8px 4px #aa99a5);
+            transition: transform 0.3s, border-bottom-color 0.2s;
+            transform-origin: top;
+        }
+
+        .envelope-trigger:hover .envelope-flap-cute {
+            transform: rotateX(5deg);
+            border-bottom-color: #cbb9cf;
+        }
+
+        .envelope-body-cute {
+            position: absolute;
+            inset: 20px 15px 12px 15px;
+            background: #f7f0e9;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #b0a2c0;
+            transition: inset 0.25s, background 0.25s;
+        }
+
+        .envelope-body-cute i {
+            font-size: 2.8rem;
+            color: #5a4b85;
+            transition: transform 0.25s, color 0.2s;
+        }
+
+        .envelope-trigger:hover .envelope-body-cute i {
+            transform: scale(1.08);
+            color: #2a1e3c;
+        }
+
+        /* hint container with tape */
+        .hint-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin: 0.5rem 0 2rem;
+            padding: 12px;
+            position: relative;
+        }
+
+        .hint-container::before {
+            content: "";
+            position: absolute;
+            top: -5px;
+            left: 30%;
+            width: 40%;
+            height: 8px;
+            background: rgba(190, 170, 155, 0.4);
+            transform: rotate(2deg);
+            border-radius: 10px;
+        }
+
+        .hint-cute {
+            font-size: 1.2rem;
+            color: #2a1e3c;
+            background: #f0e4d8;
+            backdrop-filter: blur(2px);
+            padding: 0.5rem 1.8rem;
+            border-radius: 50px;
+            display: inline-block;
+            border: 2px solid #b0a2c0;
+            transition: all 0.3s;
+            animation: hintGlow 3s infinite;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            font-weight: 600;
+        }
+
+        @keyframes hintGlow {
+            0% { background: #f0e4d8; }
+            50% { background: #f5ede4; transform: scale(1.02); }
+            100% { background: #f0e4d8; }
+        }
+
+        .hint-cute i {
+            transition: transform 0.2s;
+            color: #5a4b85;
+        }
+        .hint-cute:hover i {
+            transform: translateX(4px);
+        }
+
+        /* ========== STEP 3: PAPER MESSAGE + PHOTO STRIPS ========== */
+        .message-area {
+            display: flex;
+            gap: 24px;
+        }
+
+        .left-content {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .message-text {
+            background: #faf5ee;
+            border-radius: 36px;
+            padding: 2rem 1.8rem;
+            border: 3px solid #d4c4d0;
+            box-shadow: 0 12px 20px -10px rgba(0, 0, 0, 0.2), inset 0 1px 5px #fff8f0;
+            text-align: justify;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #2a1e3c;
+            max-height: 60vh;
+            overflow-y: auto;
+            transition: box-shadow 0.3s, border-color 0.2s;
+            position: relative;
+            font-weight: 500;
+        }
+
+        .message-text::before {
+            content: "";
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            width: 60px;
+            height: 15px;
+            background: rgba(180, 160, 150, 0.2);
+            transform: rotate(5deg);
+            border-radius: 10px;
+        }
+
+        .message-text p {
+            margin-bottom: 1.4rem;
+        }
+
+        .message-text i {
+            color: #5a4b85;
+            opacity: 0.8;
+            transition: opacity 0.2s, transform 0.2s;
+            font-size: 1.1rem;
+        }
+
+        .message-text i:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        /* bottom strip - 3 images */
+        .bottom-strip {
+            background: #f0e8dd;
+            padding: 15px;
+            border-radius: 30px;
+            box-shadow: 0 10px 15px -5px rgba(0, 0, 0, 0.2), inset 0 0 0 3px #fff8f0, inset 0 0 0 6px #dccfc4;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: stripPop 0.6s;
+            border: 2px solid #b0a2b8;
+            position: relative;
+        }
+
+        .bottom-strip::after {
+            content: "";
+            position: absolute;
+            top: -5px;
+            left: 15px;
+            width: 50px;
+            height: 12px;
+            background: rgba(190, 165, 145, 0.4);
+            transform: rotate(-3deg);
+            border-radius: 10px;
+        }
+
+        .right-strip {
+            flex: 1;
+            min-width: 160px;
+            background: #f0e8dd;
+            padding: 15px;
+            border-radius: 30px;
+            box-shadow: 0 10px 15px -5px rgba(0, 0, 0, 0.2), inset 0 0 0 3px #fff8f0, inset 0 0 0 6px #dccfc4;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            animation: stripPop 0.6s;
+            border: 2px solid #b0a2b8;
+            position: relative;
+        }
+
+        .right-strip::before {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            right: 20px;
+            width: 40px;
+            height: 10px;
+            background: rgba(170, 150, 135, 0.4);
+            transform: rotate(4deg);
+            border-radius: 10px;
+        }
+
+        @keyframes stripPop {
+            0% { opacity: 0; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .photo-item {
+            background: #fffaf2;
+            padding: 8px 8px 10px 8px;
+            border-radius: 18px;
+            box-shadow: 0 5px 0 #cbb9cf, 0 8px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            flex: 1;
+            border: 2px solid #e0d0d8;
+            position: relative;
+        }
+
+        .photo-item::after {
+            content: "";
+            position: absolute;
+            top: -3px;
+            right: 10px;
+            width: 30px;
+            height: 8px;
+            background: rgba(200, 180, 170, 0.4);
+            transform: rotate(5deg);
+            border-radius: 10px;
+        }
+
+        .photo-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 0 #b7a6b0, 0 12px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            border: 3px solid #e5d5d0;
+            object-fit: cover;
+            aspect-ratio: 1/1;
+        }
+
+        .photo-item .photo-caption {
+            margin-top: 4px;
+            font-size: 0.8rem;
+            color: #2a1e3c;
+            font-weight: 600;
+        }
+
+        .message-text::-webkit-scrollbar {
+            width: 6px;
+        }
+        .message-text::-webkit-scrollbar-track {
+            background: #e5d9d0;
+            border-radius: 10px;
+        }
+        .message-text::-webkit-scrollbar-thumb {
+            background: #b0a2b8;
+            border-radius: 10px;
+        }
+
+        /* mobile optimization */
+        @media (max-width: 800px) {
+            .message-area {
+                flex-direction: column;
+            }
+            .right-strip {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .photo-item {
+                min-width: 130px;
+                max-width: 160px;
+            }
+            .message-text {
+                font-size: 1rem;
+                padding: 1.5rem 1.2rem;
+                max-height: 50vh;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .card-cute { padding: 1.8rem 1.2rem; }
+            .greeting-text { font-size: 2rem; }
+            .icon-row { font-size: 1.8rem; gap: 0.8rem; }
+            .btn-cute { font-size: 1.4rem; padding: 0.8rem 2rem; }
+            .hint-cute { font-size: 1.1rem; }
+            .message-text { font-size: 0.95rem; }
+        }
+
+        @media (max-width: 480px) {
+            .card-cute { padding: 1.5rem 1rem; }
+            .greeting-text { font-size: 1.8rem; }
+            .icon-row { font-size: 1.6rem; gap: 0.6rem; }
+            .btn-cute { font-size: 1.2rem; padding: 0.7rem 1.5rem; }
+            .message-text { font-size: 0.9rem; }
+        }
+
+        .music-badge {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.8rem;
+            color: #2a1e3c;
+            background: rgba(240, 230, 220, 0.7);
+            backdrop-filter: blur(4px);
+            padding: 4px 12px;
+            border-radius: 40px;
+            z-index: 30;
+            border: 2px solid #b0a2b8;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- strong paper texture overlay (fixed, covers everything) -->
+    <div class="paper-texture"></div>
+
+    <!-- floating background elements (hearts, sparkles) -->
+    <div class="floating-bg" id="floatingBg"></div>
+
+    <!-- main card with tape and ribbon -->
+    <div class="card-cute">
+        <div class="side-tape"></div>
+        <div class="ribbon"></div>
+
+        <!-- STEP 1: greeting + only button -->
+        <div id="step1" class="step active">
+            <div class="center-wrapper">
+                <div class="greeting-text">HAPPY VALENTINE'S DAY BABII</div>
+                <div class="icon-row">
+                    <i class="bi bi-heart-fill"></i>
+                    <i class="bi bi-emoji-kiss"></i>
+                    <i class="bi bi-envelope-heart-fill"></i>
+                    <i class="bi bi-star-fill"></i>
+                    <i class="bi bi-moon-stars-fill"></i>
+                </div>
+                <div class="button-container">
+                    <button class="btn-cute" id="showEnvelopeBtn">
+                        <i class="bi bi-hand-index-thumb-fill me-2"></i>CLICK MO TO BABII
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 2: envelope + hint -->
+        <div id="step2" class="step envelope-step">
+            <div class="center-wrapper">
+                <div class="envelope-container">
+                    <div id="envelopeClick" class="envelope-trigger" role="button" tabindex="0">
+                        <div class="envelope-design">
+                            <div class="envelope-flap-cute"></div>
+                            <div class="envelope-body-cute">
+                                <i class="bi bi-envelope-open-heart-fill"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hint-container">
+                    <div class="hint-cute">
+                        <i class="bi bi-hand-index-thumb-fill me-2"></i> click the envelope
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 3: message + photo strips -->
+        <div id="step3" class="step message-step">
+            <div class="message-area">
+                <div class="left-content">
+                    <div class="message-text">
+                        <p><i class="bi bi-heart-fill me-2"></i>Babii ko Happy Valentine’s Day 😘😘!!. 
+                        im sorry if hindi ako makapagbigay sayo ng chocolate or gifts, and mga real or fake flowers gaya ng iba po bii, 
+                        but willing akong ibigay sayo all my love and i’ll treat you THE BEST as i could babii ko. 
+                        Always remember na you’re the only girl i lovee babii, and I'll do everything I can to understand you- 
+                        your moods, your attitude, your ups and downs even if I get tired, I won't walk away I won't give up on you I promise po. 
+                        Pasensya napo ang layo ko di pa us makapagdate po, but darating din yung panahon na legal na tayo both sides and we’re together na ah. 
+                        Babawi po ako sayo soon pag nagmeet na po us ha!. Sana po di ka magsawang mahalin ako kahit ang layo ko sayo sana po hindi mo ko sukuan 
+                        pag may misunderstanding tayo, sorry po kung hindi ako masyado makapagbigay ng time sayo bii, matagal din kasi makauwi eh sorry po ah. 
+                        You know babii na love na love na love kitaa and hinding hindi po kita iiwan or ipagpapalit lang basta basta kasi hindi ka kapalit palit 
+                        tandaan mo po yan and wag mo po sanang isipin na madali kang palitan or kapalit palit ka kasi hindi po, mahirap nang humanap ng gaya mo 
+                        babii ko bihira nalang po yung mga kagaya mo kaya hindi napo kita sasayangin, always remember na kahit mahirap and pahirap napo ng pahirap 
+                        yung mga pagsubok na dumadating sa relationship natin hinding hindi kita susukuan, forever partner napo us babii!!</p>
+                        <p>AGAIN HAPPYYY VALENTINE'S DAYYY BABII KO ILOVEYOUUU MY CUTIEE PATOTIEE!! 
+                        <i class="bi bi-emoji-kiss"></i> <i class="bi bi-heart-fill"></i></p>
+                    </div>
+                    <div class="bottom-strip" id="bottomStrip"></div>
+                </div>
+                <div class="right-strip" id="rightStrip"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- audio and music credit -->
+    <audio id="bgAudio" loop preload="auto" style="display: none;"></audio>
+    <div class="music-badge">
+        <i class="bi bi-music-note-beamed me-1"></i> Your Universe - Rico Blanco
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        (function() {
+            // Background animations
+            const bg = document.getElementById('floatingBg');
+            
+            function createFloater() {
+                if (!bg) return;
+                const heart = document.createElement('div');
+                heart.className = 'float-heart';
+                heart.innerText = ['❤️', '🧡', '💛', '💚', '💙', '💜'][Math.floor(Math.random()*6)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (Math.random() * 6 + 6) + 's';
+                heart.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
+                heart.style.opacity = 0.1 + Math.random() * 0.1;
+                bg.appendChild(heart);
+                setTimeout(() => heart.remove(), 12000);
+
+                const spark = document.createElement('div');
+                spark.className = 'sparkle';
+                spark.style.left = Math.random() * 100 + '%';
+                spark.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                spark.style.background = '#b0a0d8';
+                spark.style.width = (Math.random() * 6 + 2) + 'px';
+                spark.style.height = spark.style.width;
+                bg.appendChild(spark);
+                setTimeout(() => spark.remove(), 10000);
+            }
+            setInterval(createFloater, 400);
+
+            // Step flow
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+            const step3 = document.getElementById('step3');
+            const btn = document.getElementById('showEnvelopeBtn');
+            const envelope = document.getElementById('envelopeClick');
+            const bottomStrip = document.getElementById('bottomStrip');
+            const rightStrip = document.getElementById('rightStrip');
+
+            function loadImages() {
+                if (bottomStrip.children.length > 0) return;
+                const imageNames = ['one.jpg', 'two.jpg', 'three.jpg', 'four.jpg', 'five.jpg'];
+                const captions = ['😘', '💕', '🌸', '✨', 'you'];
+                
+                for (let i = 0; i < 3; i++) {
+                    const item = document.createElement('div');
+                    item.className = 'photo-item';
+                    const img = document.createElement('img');
+                    img.src = imageNames[i];
+                    img.alt = `photo ${i+1}`;
+                    img.onerror = () => { img.src = 'https://via.placeholder.com/200x200/f0e8dd/5a4b85?text=love'; };
+                    const caption = document.createElement('div');
+                    caption.className = 'photo-caption';
+                    caption.innerText = captions[i];
+                    item.appendChild(img);
+                    item.appendChild(caption);
+                    bottomStrip.appendChild(item);
+                }
+                
+                for (let i = 3; i < 5; i++) {
+                    const item = document.createElement('div');
+                    item.className = 'photo-item';
+                    const img = document.createElement('img');
+                    img.src = imageNames[i];
+                    img.alt = `photo ${i+1}`;
+                    img.onerror = () => { img.src = 'https://via.placeholder.com/200x200/f0e8dd/5a4b85?text=love'; };
+                    const caption = document.createElement('div');
+                    caption.className = 'photo-caption';
+                    caption.innerText = captions[i];
+                    item.appendChild(img);
+                    item.appendChild(caption);
+                    rightStrip.appendChild(item);
+                }
+            }
+
+            function goToStep(stepEl) {
+                [step1, step2, step3].forEach(s => s.classList.remove('active'));
+                void stepEl.offsetWidth;
+                stepEl.classList.add('active');
+                if (stepEl === step3) loadImages();
+            }
+
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                goToStep(step2);
+            });
+
+            envelope.addEventListener('click', (e) => {
+                e.preventDefault();
+                goToStep(step3);
+            });
+
+            envelope.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    goToStep(step3);
+                }
+            });
+            envelope.setAttribute('tabindex', '0');
+
+            // Music
+            const audio = document.getElementById('bgAudio');
+            audio.src = 'Rico Blanco - Your Universe.mp3';
+            audio.load();
+
+            function playAudio() {
+                audio.play().catch(() => {});
+            }
+
+            playAudio();
+            document.body.addEventListener('click', function once() {
+                playAudio();
+                document.body.removeEventListener('click', once);
+            }, { once: true });
+            btn.addEventListener('click', playAudio);
+            envelope.addEventListener('click', playAudio);
+        })();
+    </script>
+</body>
+</html>
